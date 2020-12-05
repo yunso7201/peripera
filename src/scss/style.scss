@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+// font
+// @import "font";
+// 한국어, 일본어
+// @include setFont("NotoSansCJK", "NotoSansCJK_Light", 100);
+// @include setFont("NotoSansCJK", "NotoSansCJK_Medium", 600);
+
+@import "variable", "reset", "main", "layout", "common", "mixin";
+
+html:lang(ko),
+html:lang(ko) body {
+  
+}

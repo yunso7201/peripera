@@ -1,0 +1,15 @@
+*/css
+/dist
+*/images
+*/test
+*.png
+*.jpg
+*.gif
+/node_modules
+/.idea
+/src/config.rb
+package-lock.json
+package.json
+/.history
+/.sass-cache
+/.vscode

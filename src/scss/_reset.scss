@@ -1,0 +1,89 @@
+// html,body {
+// 	border:none;
+// 	@include fontfamily(100);
+// 	letter-spacing:-0.02rem;
+// 	font-size:15px;
+// 	line-height:1.7;
+// 	color:#222;
+// 	overflow-x:hidden;
+// 	word-break: keep-all;
+// 	@include respond-to(tablet) {
+// 		font-size:16px;
+// 		line-height:1.5;
+// 	}
+// 	@include respond-to(mobile) {
+// 		font-size:14px;
+// 	}
+// 	@media (max-width:320px) {
+// 		overflow-x:scroll;
+// 		.container{
+// 			overflow:hidden;
+// 		}
+// 	}
+// }
+html, body, div, ul, li, dl, dt, dd, ol, p, h1, h2, h3, h4, h5, h6, form, fieldset {
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6,strong,b,th{
+	font-weight:600;
+}
+html {
+	-webkit-text-size-adjust:none;
+}
+ul, ol, dl {
+	list-style: none;
+}
+
+em, address {
+	font-style: normal
+}
+
+img {
+	border: 0;
+	vertical-align: top;
+}
+div {
+	display: block;
+}
+fieldset {
+	border:0;
+}
+table {
+	border-collapse:collapse;
+	table-layout:fixed;
+	border-spacing:0px;
+}
+button {
+	border:none;
+	background:none;
+	cursor:pointer;
+	outline:none;
+	padding:0px;
+	letter-spacing:-0.05rem;
+}
+a, a:active, a:link, a:visited, a:hover {
+	text-decoration:none;
+}
+a {
+	color:#222;
+}
+header, footer, main{
+	display:block;
+	clear: both;
+}
+.blind {
+	display:block;
+	position:absolute !important;
+	top:-2000em;
+	left:-2000em;
+	width:1px;
+	height:1px;
+	text-indent:2000em;
+	font-size:1px;
+	overflow: hidden;
+}
+.bg_dark {
+	background-color: #1e1f21;
+	color: #fff;
+}
