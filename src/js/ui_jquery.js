@@ -1,19 +1,236 @@
-$(function(){
-	$(".close").click(function(e){
-		e.preventDefault();
-		if($("input[name=todayClose]").is(":checked")){ // 체크박스가 선택되어 있다면,
-			setCookie("close", "yes", 1); // close cookie를 yes 값으로 저장합니다.
-			// cookie 이름 : close
-			// cookie 값 : yes
+//gnb
+window.addEventListener("load", function(){
+	var gnb=document.getElementById("GNB");
+
+	for(var i=0; i<gnb.children.length; i++){
+		if(gnb.children[i].className == "GNB_inner"){
+			var inner=gnb.children[i];
 		}
-		$(".popup").removeClass("active");
+	}
+
+	var gnbUl=inner.children[0];
+	var depth1Li=inner.children[0].children;
+
+	for(var j=0; j<depth1Li.length; j++){
+		depth1Li[j].addEventListener("mouseenter", function(){
+			gnbUl.classList.add("over");
+		});
+		depth1Li[j].addEventListener("mouseleave", function(){
+			gnbUl.classList.remove("over");
+		});
+		depth1Li[j].children[0].addEventListener("focusin", function(e){
+			e.target.classList.add("over");
+		});
+		depth1Li[0].children[0].addEventListener("focusin", function(){
+			gnbUl.classList.add("over");
+		});
+
+		var depth2Li=depth1Li[j].children[1].children;
+		console.log(depth2Li);
+
+		if(j == 5){
+			for(var k=0; k<depth2Li.length; k++){
+				depth2Li[2].addEventListener("focusout", function(){
+					gnbUl.classList.remove("over");
+				});
+			}
+		}
+
+		for(var h=0; h<depth2Li.length; h++){
+			if(h == (depth2Li.length-1)){
+				depth2Li[h].addEventListener("focusout", function(e){
+					// console.log("focusout!!");
+					console.log(e.currentTarget);
+					var link=e.currentTarget.parentElement.previousElementSibling;
+					link.classList.remove("over");
+				});
+			}
+		}
+	}
+});
+
+
+$(function(){
+	// slide
+	var keyvisual={
+		key1 : "keyvisual1.jpg",
+		key2 : "keyvisual2.jpg"
+	}
+
+	var dataN=0;
+	// <div class="keyvisual">
+	var keyContainer=document.getElementsByClassName("keyvisual")[0];
+
+	// <div class="keyvisual_inner">
+	var inner=document.createElement("div"); // 메모리에 그리기
+	inner.setAttribute("class", "keyvisual_inner"); // 속성을 추가하기
+	keyContainer.appendChild(inner); // appendChild() 화면 그리기
+
+	// <div class="controlls">
+	var controlls=document.createElement("div");
+	controlls.setAttribute("class", "controlls");
+	keyContainer.appendChild(controlls);
+
+	var keyString="";
+	var controllString="";
+
+	keyString+='<ul class="keyimage">\n';
+	controllString+='<ul>\n';
+
+
+	for(key in keyvisual){ // for(키 in 오브젝트[키])
+		// console.log(key+":"+keyvisual[key]);
+		// <li><img src="images/keyvisual1.jpg" alt="Keyimage1"></li>
+		keyString+='<li><img src="/img/' + keyvisual[key] + '" alt="keyvisual'+ (dataN+1) + '"></li>\n';
+
+		// <li class="active"><a href="">1</a></li>
+		controllString+='<li><a href="">' + (dataN+1) + '</a></li>' // 추가
+
+		// console.log("dataN:" + dataN); // for in 구문을 for처럼 사용하는 방법입니다,.
+		dataN++; // 0, 1
+	}
+
+	keyString+='</ul>';
+	inner.innerHTML=keyString;
+	// console.log(keyString);
+
+	controllString+='</ul>';
+	controlls.innerHTML=controllString;
+	console.log(controllString);
+
+	var n1=0;
+
+	$(".keyimage li").eq(0).addClass("on");
+	$(".controlls li").eq(0).addClass("active");
+
+	setInterval(function(){
+		if(n1 < 1){
+			n1=n1+1;
+		}
+		else{
+			n1=0;
+		}
+
+		$(".keyimage li").removeClass("on");
+		$(".keyimage li").eq(n1).addClass("on");
+		$(".controlls li").removeClass("active");
+		$(".controlls li").eq(n1).addClass("active");
+	}, 7000);
+
+	// search
+	$(".campus_find dl dt a").click(function(e){
+		e.preventDefault();
+		$(this).toggleClass("active");
+		$(this).parent().next("dd").slideToggle(300);
+	});
+	$(".campus_find .area dl dd a").click(function(e){
+		e.preventDefault();
+		$(".campus_find .area dl dd a").removeClass("active");
+		$(this).addClass("active");
+
+		listName=$(this).text();
+		$(".campus_find .area dt a").html(listName+"<span></span>");
+		$(".campus_find .area dl dd").slideUp(300);
+		$(".campus_find .area dt a").removeClass("active");
+	});
+	$(".campus_find .store dl dd a").click(function(e){
+		e.preventDefault();
+		$(".campus_find .store dl dd a").removeClass("active");
+		$(this).addClass("active");
+
+		listName=$(this).text();
+		$(".campus_find .store dt a").html(listName+"<span></span>");
+		$(".campus_find .store dl dd").slideUp(300);
+		$(".campus_find .store dt a").removeClass("active");
 	});
 
-	if(GetCookie("close") == "yes"){ // 화면 로딩 시에 close cookie 값이 yes이면,
-		// $(".popup").hide(); // 팝업을 닫습니다.
-	}else{
-		// $(".popup").show(); // 아니라면 팝업을 열어줍니다.
-		$(".popup").addClass("active");
+	// notice
+	var n=0;
+
+	$(".main_tab a").click(function(e){
+		e.preventDefault();
+		n=$(this).parent().index();
+		$(".main_tab a").removeClass("on");
+		$(this).addClass("on");
+
+		$(".main_panel > div").removeClass("active");
+		$(".main_panel > div").eq(n).addClass("active");
+	});
+
+	// video
+	var video=document.getElementById("my_video");
+
+	$(".control").click(function(e){
+		e.preventDefault();
+		$(this).fadeOut(300);
+		video.play();
+	});
+	$("#my_video").click(function(){
+		$(".control").fadeIn(300);
+		video.pause();
+	});
+	video.addEventListener("ended", function(){
+		$(".control").fadeIn(300);
+		video.pause();
+		video.currentTime=0;
+	});
+	// focus
+	$(".control").focusin(function(e){
+		e.preventDefault();
+		$(this).fadeOut(300);
+		video.play();
+	});
+
+	// footer banner
+	var w=180;
+	var amount=0;
+
+	$(".prev").click(function(e){
+		e.preventDefault();
+		leftMoving();
+	});
+	$(".next").click(function(e){
+		e.preventDefault();
+		rightMoving();
+	});
+
+	function rightMoving(){
+		$(".site_wrapper ul").prepend($(".site_wrapper ul li:last-child"));
+		amount-=w;
+		$(".site_wrapper ul").css({left:amount});
+		amount+=w;
+		$(".site_wrapper ul").animate({left:amount}, 500);
+	}
+	function leftMoving(){
+		amount-=w;
+		$(".site_wrapper ul").animate({left:amount}, 500, function(){
+			$(this).append($(".site_wrapper ul li:first-child"));
+			amount+=w;
+			$(this).css({left:amount});
+		});
+	}
+
+	// popup
+	$(".close").click(function(e){
+		e.preventDefault();
+		$(".popup").fadeOut(300);
+		$(".dim").fadeOut(300);
+		$("body").addClass("static");
+	});
+
+	// cookie popup
+	$(".close").click(function(e){
+		e.preventDefault();
+		if($("input[name=todayClose]").is(":checked")){
+			setCookie("close", "yes", 1);
+		}
+		$(".popup, .dim").fadeOut(300); // 2019-12-11
+	});
+
+	if(GetCookie("close") == "yes"){
+	}
+	else{
+		$(".popup, .dim").fadeIn(300); // 2019-12-11
 	}
 
 	function setCookie(name, value, expiredays){
@@ -39,208 +256,4 @@ $(function(){
 			}
 		} return value;
 	}
-
-	
-
-	$("#gnb > ul > li").focusin(function(){
-		$(this).parents(".menu").stop().addClass("over");
-	});
-	$("#gnb > ul > li").focusout(function(){
-		$(this).parents(".menu").stop().removeClass("over");
-	});
-
-	$("#gnb > ul > li:first-child > a").focusin(function(){
-		$(".header .menu").addClass("over");
-	});
-	$("#gnb li:last-child li:last-child").focusout(function(){
-		$(".header .menu").removeClass("over");
-	});
-	$("#gnb > ul > li > a").focusin(function(){ // 수정
-		$(this).addClass("over");
-	});
-	$("#gnb li li:last-child").focusout(function(){ // 수정
-		$(this).parent().prev().removeClass("over");
-	});
-
-	$(".main_notice .title a").eq(0).addClass("active");
-	$(".main_notice .tab_group > div").eq(0).addClass("active");
-
-	var n=0;
-
-	$(".main_notice .title a").click(function(e){
-		e.preventDefault();
-		n=$(this).index();
-		$(".main_notice .title a").removeClass("active");
-		$(this).addClass("active");
-		$(".main_notice .tab_group > div").removeClass("active");
-		$(".main_notice .tab_group > div").eq(n).addClass("active");
-	});
-
-	var n;
-	var listName="";
-
-	$(".select dt a").click(function(e){
-		e.preventDefault();
-		/*
-		if($(this).hasClass("active") == false){
-			$(".select dd a").removeClass("active");
-		}
-		*/
-		$(this).toggleClass("active");
-		$(this).parent().next("dd").slideToggle(300);
-	});
-	$(".select dd a").click(function(e){
-		e.preventDefault();
-		$(".select dd a").removeClass("active");
-		$(this).addClass("active");
-		listName=$(this).text();
-
-		var $currentDl=$(this).parents("dl");
-		$currentDl.find("dt a").html(listName+"<span></span>");
-		$currentDl.find("dt a").removeClass("active");
-		$currentDl.find("dd").slideUp(300);
-
-		n=$(this).parent().index();
-		var $select=$("."+$currentDl.attr("class")+"_select"); // $("."+"center"+"_select")
-		$select.find("option").prop("selected", false);
-		$select.find("option").eq(n+1).prop("selected", true);
-	});
-
-	var w=180;
-	var amount=0;
-
-	$(".direction .prev").click(function(e){
-		e.preventDefault();
-		leftMoving();
-	});
-	$(".direction .next").click(function(e){
-		e.preventDefault();
-		rightMoving();
-	});
-
-	function leftMoving(){
-		amount-=w;
-		$(".rel_site_inner .site_wrapper ul").animate({left:amount}, 500, function(){
-			$(this).append($(".rel_site_inner .site_wrapper ul li:first-child"));
-			amount+=w;
-			$(this).css({left:amount});
-		});
-	}
-	function rightMoving(){
-		$(".rel_site_inner .site_wrapper ul").prepend($(".rel_site_inner .site_wrapper ul li:last-child"));
-		amount-=w;
-		$(".rel_site_inner .site_wrapper ul").css({left:amount});
-		amount+=w;
-		$(".rel_site_inner .site_wrapper ul").animate({left:amount}, 500);
-	}
-
-	// Native Gallery JavaScript
-	var keyvisual={
-		key1 : "keyvisual1.jpg",
-		key2 : "keyvisual2.jpg",
-		key3 : "keyvisual3.jpg",
-		key4 : "keyvisual4.jpg",
-		key5 : "keyvisual5.jpg"
-	}
-
-	var dataN=0;
-	//<div class="keyvisual">
-	var keyContainer=document.getElementsByClassName("keyvisual")[0];
-
-	//<div class="keyvisual_inner">
-	var inner=document.createElement("div");  //메모리에 그리기
-	inner.setAttribute("class", "keyvisual_inner"); //속성을 추가하기
-	keyContainer.appendChild(inner);   //appendChild() 화면그리기
-
-	//<div class="controlls">
-	var controlls=document.createElement("div");
-	controlls.setAttribute("class", "controlls");
-	keyContainer.appendChild(controlls);
-
-	var keyString="";
-	var controllString="";
-
-	keyString+='<ul>\n' //문자열 안에서 개행처리하는 특수문자입니다.
-	controllString+='<ul>\n'
-
-	for(key in keyvisual){
-		//console.log(key+":"+keyvisual[key]);
-		//key1 : "keyvisual1.jpg"
-
-		//<li><a href="#"><img src="img/keyvisual2.jpg" alt="keyvisual1"></a></li>
-		keyString += '<li><a href="#"><img src="/img/' + keyvisual[key]+ '"alt=" + "keyvisual'+ (dataN+1) + '"></a></li>\n';
-
-		//console.log("dataN :"+dataN); //for in 구문을 for처럼 사용하는 방법
-		controllString +='<li><a href="#">' + (dataN+1) + '</a></li>' //추가
-		dataN++; //0,1,2 ...
-	}
-
-	keyString+='</ul>';
-	inner.innerHTML=keyString;
-	//console.log(keyString);
-
-	controllString+='</ul>' //추가
-	controlls.innerHTML=controllString; //추가
-
-	var $galleryMoving=$(".keyvisual_inner"); // 이동 갤러리의 참조입니다.
-	var $controlls=$(".controlls"); // 컨트롤 버튼의 참조입니다.
-	var $left=$(".direction .left"); // 왼쪽 버튼의 참조입니다.
-	var $right=$(".direction .right"); // 오른쪽 버튼의 참조입니다.
-	var galleryNum=5; // 갤러리 이미지 개수입니다.
-
-	var n=0;
-	var pos;
-
-	$controlls.find("li").eq(n).addClass("active");
-
-	$controlls.find("a").click(function(e){
-		e.preventDefault();
-		$controlls.find("li").removeClass("active");
-		$(this).parent().addClass("active");
-
-		n=$(this).parent().index();
-		console.log(n);
-		pos=n*-1*100+"%";
-		$galleryMoving.animate({left:pos}, 400);
-	});
-
-	$left.click(function(e){
-		e.preventDefault();
-		if(n > 0){
-			n--;
-			$controlls.find("li").removeClass("active");
-			$controlls.find("li").eq(n).addClass("active");
-			pos=n*-1*100+"%";
-			$galleryMoving.animate({left:pos}, 400);
-		}
-	});
-	$right.click(function(e){
-		e.preventDefault();
-		if(n < (galleryNum-1)){
-			n++;
-			$controlls.find("li").removeClass("active");
-			$controlls.find("li").eq(n).addClass("active");
-			pos=n*-1*100+"%";
-			$galleryMoving.animate({left:pos}, 400);
-		}
-	});
-
-	var $campusMoving=$(".campus_wrap .campus_wrap_moving");
-	var $controls=$(".camedia_controlls");
-	var campusNum=3;
-
-	var n=0;
-	var campus;
-
-	$controls.find("li").eq(n).find("a").addClass("active");
-
-	$controls.find("a").click(function(e){
-		e.preventDefault();
-		$controls.find("li").removeClass("active");
-		$(this).parent().addClass("active");
-
-		n=$(this).parent().index();
-		campus=n*-1*100+"%";
-		$campusMoving.animate({left:campus}, 400);
-	});
 });
